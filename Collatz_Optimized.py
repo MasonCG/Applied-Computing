@@ -18,6 +18,7 @@ def collatz_length(num):
 
     while (n != 1):
         
+        # checking to see if step has already been done
         if n in collatz_dict:
             steps += collatz_dict[n] - 1
             collatz_dict[num] = steps

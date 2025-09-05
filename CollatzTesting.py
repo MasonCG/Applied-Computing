@@ -7,6 +7,7 @@ import time
 
 range = 1_000_000
 
+
 # getting time duration for base Collatz
 s_time = time.time()
 
@@ -19,6 +20,14 @@ print("base: ", duration, "s")
 s_time = time.time()
 
 longest = Optimized.collatz_length_in_range(1, range)
+
+duration = time.time() - s_time
+print("base: ", duration, "s")
+
+# getting time duration for Bonus Optimized Collatz
+s_time = time.time()
+
+longest = Bonus.collatz_length_in_range(1, range)
 
 duration = time.time() - s_time
 print("base: ", duration, "s")
