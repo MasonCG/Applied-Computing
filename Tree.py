@@ -12,33 +12,68 @@ class SearchTree(object):
         self.root = None
 
     def add(self, value):
-        """ Adds value to Tree"""
-
-        #if root is empty, make a node put the value there and leave.
-        # since the root istn empty, start with node at the root.
-        # while TRUE:
-            # if our value is smaller then check left brance
-                # if theres nothing to the left then
-                    # make a new node put the value there and leave
-                    # something already to the left,
-                    # so follow the branch by updating the node.
-            # else if our value is larger then check right brance
-                # if there snothing to the right hen
-                    #make a new node put the value ther and leave
-                # something already to the right
-                    # so follow the bracnh by updating the node
-            # else our value is equal
-                # ignore it (equal values are discarded) and leave.
+        """ Add value to Tree"""
 
         if self.root == None:
             self.root = TreeNode(value)
         else:
             node = self.root
+
             while True:
-                if value < node.value:
-                    if node.left == TreeNode(value):
-                        break
-                else: 
+                if value < node.value:                  #=== new value is left of current node ===
+                    if node.left == None:               # is there a value left of current Node?
+                        node.left = TreeNode(value)     # if not create new node and assign it to current nodes left
+                        break                           
+                    else: 
+                        node = node.left                # if ther is a value assign it as current node
+                elif value > node.value:                #=== new value is right of current node ===
+                    if node.right == None:              # is there a value to the right of current Node?
+                        node.right = TreeNode(value)    # if not create new Node and assign it to current node's right
+                        break                       
+                    else:
+                        node=node.right                 # if there is a value assign it as current Node
+                else:
+                    break
+
+    def find(self, value):
+        """ Find value in Tree"""
+
+        node = self.root
+
+        while True:
+            if node == None:
+                return False
+            
+            if node.value == value:
+                return True
+            
+            if node.value > value:
+                node = node.left
+
+            if node.value < value: 
+                node = node.right
+
+    def items(self):
+        """ returns a list that holds values in order"""
+
+        value_list = []
+        self._inorder_trav(self.root, value_list)
+
+        return value_list
+        
+    def _inorder_trav(self, node, value_list):
+        """ recursive funtion to add nodes in order to a list"""
+
+        if node == None:
+            return
+        
+        # traverse to the left
+        self._inorder_trav(node.left, value_list)
+        
+        # adds own self
+        value_list.append(node.value)
+
+        # traverse to the right
+        self._inorder_trav(node.right, value_list)
 
 
-    def checkValue(self, value)
