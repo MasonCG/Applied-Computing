@@ -1,79 +1,63 @@
 # tree class
 
 
-class TreeNode(object):
-    def __init__(self, value):
-        self.right = None
-        self.left = None
-        self.value = value
+class Node(object):
+    def __init__(self, text:str, yes=None, no=None):
+        self.yes = yes
+        self.no = no
+        self.text = text
 
-class SearchTree(object):
+class DecisionTree(object):
     def __init__(self):
         self.root = None
 
-    def add(self, value):
-        """ Add value to Tree"""
 
-        if self.root == None:
-            self.root = TreeNode(value)
+    def nextNode(self, prevNode: Node =Node(text=None), decision : str =None):
+        """Takes the previous node and goes to the next node in the tree based on the given decision
+            Remember: animal nodes are on the end of the tree they will NOT have a nextNode
+            prevNode: "Node instance" previous node in tree
+            decision: "String" Answer to previous nodes question
+        """
+
+        # raising parameter errors 
+
+        if (not isinstance(prevNode, Node)):
+            raise TypeError('preNode must be an instance of the Node class.')
+        if (not isinstance(decision, str)):
+            raise TypeError('decision must be a string of "Y" or "N".')
+        if (decision != 'Y' or decision != 'N'):
+            raise ValueError('decision must be a string of "Y" or "N" ')
+        
+
+        # if node not given start at self.root
+        if not preNode.text:
+            preNode = self.root
+
+        if (decision == "Y"):
+            return prevNode.yes
         else:
-            node = self.root
-
-            while True:
-                if value < node.value:                  #=== new value is left of current node ===
-                    if node.left == None:               # is there a value left of current Node?
-                        node.left = TreeNode(value)     # if not create new node and assign it to current nodes left
-                        break                           
-                    else: 
-                        node = node.left                # if ther is a value assign it as current node
-                elif value > node.value:                #=== new value is right of current node ===
-                    if node.right == None:              # is there a value to the right of current Node?
-                        node.right = TreeNode(value)    # if not create new Node and assign it to current node's right
-                        break                       
-                    else:
-                        node=node.right                 # if there is a value assign it as current Node
-                else:
-                    break
-
-    def find(self, value):
-        """ Find value in Tree"""
-
-        node = self.root
-
-        while True:
-            if node == None:
-                return False
-            
-            if node.value == value:
-                return True
-            
-            if node.value > value:
-                node = node.left
-
-            if node.value < value: 
-                node = node.right
-
-    def items(self):
-        """ returns a list that holds values in order"""
-
-        value_list = []
-        self._inorder_trav(self.root, value_list)
-
-        return value_list
+            return prevNode.no
         
-    def _inorder_trav(self, node, value_list):
-        """ recursive funtion to add nodes in order to a list"""
+    def addNode(self, prevAnimalNode:Node, text: str, q=True: bool):
+        """
+            Takes given text and adds a new Node of type q. 
+            prevAnimalNode: "Node instance" the animal node that was guessed wrong. 
+            text: "str" of question or animal
+            q: "boolean" tells wheather or not node is a question 
+        """
 
-        if node == None:
-            return
-        
-        # traverse to the left
-        self._inorder_trav(node.left, value_list)
-        
-        # adds own self
-        value_list.append(node.value)
+        # raising parameter errors
 
-        # traverse to the right
-        self._inorder_trav(node.right, value_list)
+        if (not isinstance(prevAnimalNode, Node)):
+            raise TypeError("'prevAnimalNode' must be an animal Node instance")
+        if (prevAnimalNode.yes != None or prevAnimalNode.no != None):
+            raise ValueError('"prevAnimalNode" must be an animal not a decision Node instance')
+        if (not isinstance(text, str)):
+            raise TypeError("'text' must be of type string.")
+        if (not isinstance(q, bool)):
+            raise TypeError('"q" must be of type boolean.')
+        
+
+        
 
 
