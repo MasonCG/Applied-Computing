@@ -10,54 +10,82 @@ class Node(object):
 class DecisionTree(object):
     def __init__(self):
         self.root = None
+        self.cur = self.root
 
 
-    def nextNode(self, prevNode: Node =Node(text=None), decision : str =None):
-        """Takes the previous node and goes to the next node in the tree based on the given decision
+    def nextNode(self, decision : str =None):
+        """takes current node and goes to the next
             Remember: animal nodes are on the end of the tree they will NOT have a nextNode
             prevNode: "Node instance" previous node in tree
             decision: "String" Answer to previous nodes question
         """
 
-        # raising parameter errors 
 
-        if (not isinstance(prevNode, Node)):
-            raise TypeError('preNode must be an instance of the Node class.')
-        if (not isinstance(decision, str)):
+        # raising parameter errors 
+        if not isinstance(decision, str):
             raise TypeError('decision must be a string of "Y" or "N".')
-        if (decision != 'Y' or decision != 'N'):
+        if decision == 'Y' or decision == 'N':
+            pass
+        else:
             raise ValueError('decision must be a string of "Y" or "N" ')
         
+        # if no nodes have been added
+        if not self.root:
+            raise LookupError('There are no Nodes in your tree')
 
-        # if node not given start at self.root
-        if not preNode.text:
-            preNode = self.root
 
-        if (decision == "Y"):
-            return prevNode.yes
+        if decision == "Y":
+            nextNode = self.cur.yes
         else:
-            return prevNode.no
+            nextNode = self.cur.no
+
+        if not nextNode.no and not nextNode.yes:
+            return nextNode.text
         
-    def addNode(self, prevAnimalNode:Node, text: str, q=True: bool):
+        self.cur = nextNode
+        return False
+
+        
+    def addQuestion(self, text: str, answer: str=None, newAnimal:str=None, guessed:str=None):
         """
             Takes given text and adds a new Node of type q. 
-            prevAnimalNode: "Node instance" the animal node that was guessed wrong. 
             text: "str" of question or animal
-            q: "boolean" tells wheather or not node is a question 
+            answer: "str" tells you answer to question
         """
+
+        # if first item is created
+        if self.root == None:
+            self.root = Node(text)
+            self.cur = self.root
+            return
 
         # raising parameter errors
 
-        if (not isinstance(prevAnimalNode, Node)):
-            raise TypeError("'prevAnimalNode' must be an animal Node instance")
-        if (prevAnimalNode.yes != None or prevAnimalNode.no != None):
-            raise ValueError('"prevAnimalNode" must be an animal not a decision Node instance')
-        if (not isinstance(text, str)):
+        if not isinstance(text, str):
             raise TypeError("'text' must be of type string.")
-        if (not isinstance(q, bool)):
-            raise TypeError('"q" must be of type boolean.')
+        if not isinstance(answer, str):
+            raise TypeError("'answer' must be of type string.")
+        if answer == 'Y' or answer == 'N':
+            pass
+        else:
+            raise ValueError('answer must be a string of "Y" or "N" ')
+        if not isinstance(newAnimal, str):
+            raise TypeError("'newAnimal' must be of type string.")
+        if not isinstance(guessed, str):
+            raise TypeError("'guessed' must be of type string.")
+
+       
+
+        if answer == 'Y':
+           newNode = Node(text, yes=Node(newAnimal), no=Node(guessed))
+        else:
+            newNode = Node(text, yes=Node(guessed), no=Node(newAnimal))
+
+        if self.cur.yes.text == guessed:
+            self.cur.yes = newNode
+        else:
+            self.cur.no = newNode
         
 
-        
-
-
+    def restart(self):
+        self.cur = self.root
